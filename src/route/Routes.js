@@ -17,6 +17,14 @@ import AddOrder from "../pages/Order/AddOrder";
 import AllOrder from "../pages/Order/AllOrder";
 import AddOrderItem from "../pages/OrderItem/AddOrderItem";
 import AllOrderItem from "../pages/OrderItem/AllOrderItem";
+import AddStaff from "../pages/Staff/AddStaff";
+import AllStaff from "../pages/Staff/AllStaff";
+import ProfileStaff from "../pages/Staff/ProfileStaff";
+import PrivateRoutes from "./PrivetRoutes";
+import POSInvoice from "../pages/ManageOrder/POSInvoice";
+import OrderDetails from "../pages/ManageOrder/OrderDetails";
+import PendingOrder from "../pages/ManageOrder/PendingOrder";
+import CompleteOrder from "../pages/ManageOrder/CompleteOrder";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +37,31 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <Dashboard />, // Standalone Login route
+        element: (
+          <PrivateRoutes requiredPermission="/dashboard">
+            <Dashboard />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/order/pos_invoice",
+        element: <POSInvoice />,
+      },
+      {
+        path: "/order/list",
+        element: <OrderDetails></OrderDetails>,
+      },
+      {
+        path: "/pending/order",
+        element: <PendingOrder></PendingOrder>,
+      },
+      {
+        path: "/order/details",
+        element: <OrderDetails></OrderDetails>,
+      },
+      {
+        path: "/complete/order",
+        element: <CompleteOrder></CompleteOrder>,
       },
       {
         path: "/add/customer",
@@ -81,6 +113,19 @@ const router = createBrowserRouter([
       {
         path: "all/order/item",
         element: <AllOrderItem></AllOrderItem>,
+      },
+      // staff
+      {
+        path: "/add/staff",
+        element: <AddStaff></AddStaff>,
+      },
+      {
+        path: "all/staff",
+        element: <AllStaff></AllStaff>,
+      },
+      {
+        path: "/staff/profile",
+        element: <ProfileStaff></ProfileStaff>,
       },
     ],
   },

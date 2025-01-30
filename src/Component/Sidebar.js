@@ -22,7 +22,10 @@ const Sidebar = () => {
           />
         </div>
         <div>
-          <h4 className="logo-text">Rukada</h4>
+          <h4 className="text-black fw-bold fs-6 mt-2 mb-0">
+            Hello Coders{" "}
+            <span className="fw-bold fs-6 mt-2 mb-0  bg bg-danger"> BD</span>{" "}
+          </h4>
         </div>
         <div className="toggle-icon ms-auto">
           <i className="bx bx-arrow-to-left"></i>
@@ -39,6 +42,50 @@ const Sidebar = () => {
           </Link>
         </li>
 
+        {/* Manage Order */}
+        <li>
+          <a
+            href="#"
+            className={`has-arrow ${openItems.ManageOrder ? "open" : ""}`}
+            onClick={() => toggleItem("ManageOrder")}
+          >
+            <div className="parent-icon">
+              <i class="bx bx-cog"></i>
+            </div>
+            <div className="menu-title">Manage Order</div>
+          </a>
+          {openItems.ManageOrder && (
+            <ul className="submenu">
+              <li>
+                <Link to="/order/pos_invoice">
+                  <i className="bx bx-right-arrow-alt"></i>POS Invoice
+                </Link>
+              </li>
+              <li>
+                <Link to="/order/list">
+                  <i className="bx bx-right-arrow-alt"></i>Order List
+                </Link>
+              </li>
+              <li>
+                <Link to="/pending/order">
+                  <i className="bx bx-right-arrow-alt"></i>Pending Order
+                </Link>
+              </li>
+              <li>
+                <Link to="/complete/order">
+                  <i className="bx bx-right-arrow-alt"></i>Complete Order
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/order/details">
+                  <i className="bx bx-right-arrow-alt"></i>Order Details
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
         {/* Category  */}
         <li>
           <a
@@ -47,7 +94,7 @@ const Sidebar = () => {
             onClick={() => toggleItem("category")}
           >
             <div className="parent-icon">
-              <i className="bx bx-cart"></i>
+              <i class="bx bx-category"></i>
             </div>
             <div className="menu-title">Category</div>
           </a>
@@ -76,7 +123,7 @@ const Sidebar = () => {
             onClick={() => toggleItem("customer")}
           >
             <div className="parent-icon">
-              <i className="bx bx-cart"></i>
+              <i class="bx bx-user-circle"></i>
             </div>
             <div className="menu-title">Customer</div>
           </a>
@@ -105,7 +152,7 @@ const Sidebar = () => {
             onClick={() => toggleItem("menu")}
           >
             <div className="parent-icon">
-              <i className="bx bx-cart"></i>
+              <i className="bx bx-menu"></i>
             </div>
             <div className="menu-title">menu</div>
           </a>
@@ -133,7 +180,7 @@ const Sidebar = () => {
             onClick={() => toggleItem("product")}
           >
             <div className="parent-icon">
-              <i class="bx bx-cookie"></i>
+              <i class="bx bx-cube"></i>
             </div>
             <div className="menu-title">Product</div>
           </a>
@@ -161,7 +208,7 @@ const Sidebar = () => {
             onClick={() => toggleItem("order")}
           >
             <div className="parent-icon">
-              <i className="bx bx-category"></i>
+              <i class="bx bx-cart"></i>
             </div>
             <div className="menu-title">Order</div>
           </a>
@@ -189,7 +236,7 @@ const Sidebar = () => {
             onClick={() => toggleItem("components")}
           >
             <div className="parent-icon">
-              <i className="bx bx-bookmark-heart"></i>
+              <i class="bx bx-cart-alt"></i>
             </div>
             <div className="menu-title">OrderItem</div>
           </a>
@@ -205,11 +252,6 @@ const Sidebar = () => {
                   <i className="bx bx-right-arrow-alt"></i>All OrderItem
                 </Link>
               </li>
-              <li>
-                <a href="component-badges.html">
-                  <i className="bx bx-right-arrow-alt"></i>Badges
-                </a>
-              </li>
             </ul>
           )}
         </li>
@@ -222,26 +264,26 @@ const Sidebar = () => {
             onClick={() => toggleItem("content")}
           >
             <div className="parent-icon">
-              <i className="bx bx-repeat"></i>
+              <i class="bx bx-group"></i>
             </div>
-            <div className="menu-title">Content</div>
+            <div className="menu-title">Staff</div>
           </a>
           {openItems.content && (
             <ul className="submenu">
               <li>
-                <a href="content-grid-system.html">
-                  <i className="bx bx-right-arrow-alt"></i>Grid System
-                </a>
+                <Link to="/add/staff">
+                  <i className="bx bx-right-arrow-alt"></i>Add Staff
+                </Link>
               </li>
               <li>
-                <a href="content-typography.html">
-                  <i className="bx bx-right-arrow-alt"></i>Typography
-                </a>
+                <Link to="/all/staff">
+                  <i className="bx bx-right-arrow-alt"></i>All Staff
+                </Link>
               </li>
               <li>
-                <a href="content-text-utilities.html">
-                  <i className="bx bx-right-arrow-alt"></i>Text Utilities
-                </a>
+                <Link to="/staff/profile">
+                  <i className="bx bx-right-arrow-alt"></i> Staff Profile
+                </Link>
               </li>
             </ul>
           )}

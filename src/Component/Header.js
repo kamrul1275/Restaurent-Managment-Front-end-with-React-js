@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import PerfectScrollbar from "perfect-scrollbar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+// import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 const Header = () => {
@@ -8,7 +10,7 @@ const Header = () => {
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [isAppsOpen, setIsAppsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
+ const [userName, setUserName] = useState("");
   const searchRef = useRef(null);
   const notificationRef = useRef(null);
   const messageRef = useRef(null);
@@ -17,65 +19,17 @@ const Header = () => {
   const notificationListRef = useRef(null);
   const messageListRef = useRef(null);
 
-  // Initialize PerfectScrollbar
-  useEffect(() => {
-    let notificationPS;
-    let messagePS;
+  const navigate = useNavigate();
 
-    try {
-      if (notificationListRef.current) {
-        notificationPS = new PerfectScrollbar(notificationListRef.current, {
-          wheelSpeed: 2,
-          wheelPropagation: true,
-          minScrollbarLength: 20,
-        });
-      }
 
-      if (messageListRef.current) {
-        messagePS = new PerfectScrollbar(messageListRef.current, {
-          wheelSpeed: 2,
-          wheelPropagation: true,
-          minScrollbarLength: 20,
-        });
+    useEffect(() => {
+      const name = localStorage.getItem("name");
+      if (name) {
+        setUserName(name);
       }
-    } catch (error) {
-      console.warn("PerfectScrollbar initialization failed:", error);
-    }
+    }, []);
 
-    return () => {
-      if (notificationPS) notificationPS.destroy();
-      if (messagePS) messagePS.destroy();
-    };
-  }, [isNotificationOpen, isMessageOpen]);
-
-  // Handle click outside to close dropdowns
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setIsSearchOpen(false);
-      }
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target)
-      ) {
-        setIsNotificationOpen(false);
-      }
-      if (messageRef.current && !messageRef.current.contains(event.target)) {
-        setIsMessageOpen(false);
-      }
-      if (appsRef.current && !appsRef.current.contains(event.target)) {
-        setIsAppsOpen(false);
-      }
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setIsUserMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+ 
 
   // Toggle functions
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
@@ -102,6 +56,24 @@ const Header = () => {
     setIsNotificationOpen(false);
     setIsMessageOpen(false);
     setIsAppsOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8000/api/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      localStorage.removeItem("token");
+      navigate("/");
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
   };
 
   return (
@@ -347,7 +319,7 @@ const Header = () => {
                 alt="user avatar"
               />
               <div className="user-info ps-3">
-                <p className="user-name mb-0">Pauline Seitz</p>
+                <p className="user-name mb-0">{userName}</p>
                 <p className="designattion mb-0">Web Designer</p>
               </div>
             </a>
@@ -390,10 +362,10 @@ const Header = () => {
                 <div className="dropdown-divider mb-0"></div>
               </li>
               <li>
-                <a className="dropdown-item" href="">
+                <button className="dropdown-item" onClick={handleLogout}>
                   <i className="bx bx-log-out-circle"></i>
                   <span>Logout</span>
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -404,19 +376,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

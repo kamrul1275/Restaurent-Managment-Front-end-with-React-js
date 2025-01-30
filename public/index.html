@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="%PUBLIC_URL%/css/dark-theme.css" />
   <link rel="stylesheet" href="%PUBLIC_URL%/css/semi-dark.css" />
   <link rel="stylesheet" href="%PUBLIC_URL%/css/header-colors.css" />
+  <link rel="stylesheet" href="%PUBLIC_URL%/plugins/datatable/css/dataTables.bootstrap5.min.css" />
 
 
     <title>React App</title>
@@ -49,7 +50,7 @@
   <script src="%PUBLIC_URL%/js/jquery.min.js"></script>
   <script src="%PUBLIC_URL%/plugins/simplebar/js/simplebar.min.js"></script>
   <script src="%PUBLIC_URL%/plugins/metismenu/js/metisMenu.min.js"></script>
-  <script src="%PUBLIC_URL%/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+  <!-- <script src="%PUBLIC_URL%/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script> -->
   <script src="%PUBLIC_URL%/plugins/chartjs/js/Chart.min.js"></script>
   <script src="%PUBLIC_URL%/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
   <script src="%PUBLIC_URL%/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
@@ -57,11 +58,33 @@
   <script src="%PUBLIC_URL%/plugins/sparkline-charts/jquery.sparkline.min.js"></script>
   <script src="%PUBLIC_URL%/plugins/jquery-knob/excanvas.js"></script>
   <script src="%PUBLIC_URL%/plugins/jquery-knob/jquery.knob.js"></script>
+  <script src="%PUBLIC_URL%/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+  <script src="%PUBLIC_URL%/plugins/datatable/js/jquery.dataTables.min.js"></script>
+
   <script>
     $(function () {
       $(".knob").knob();
     });
   </script>
+
+    <script>
+      $(document).ready(function () {
+        $('#example').DataTable();
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        var table = $('#example2').DataTable({
+          lengthChange: false,
+          buttons: ['copy', 'excel', 'pdf', 'print']
+        });
+
+        table.buttons().container()
+          .appendTo('#example2_wrapper .col-md-6:eq(0)');
+      });
+    </script>
+
+
 
 <script>
 
@@ -76,10 +99,9 @@
 </script>
 
 
-
- <!-- <script src="%PUBLIC_URL%/js/index.js"></script> 
+<!-- <script src="%PUBLIC_URL%/js/index.js"></script>  -->
  
- <script src="%PUBLIC_URL%/js/app.js"></script> -->
+ <!-- <script src="%PUBLIC_URL%/js/app.js"></script> -->
 
   </body>
 </html>
