@@ -15,8 +15,6 @@ const CreateCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // alert("Category Name: " + categoryName);
-
     // Basic validation
     if (!categoryName) {
       setError("Category name is required.");
@@ -41,7 +39,7 @@ const CreateCategory = () => {
 
       console.log("API Response: ", response.data); // Debugging
       // Handle success response
-      if (response.status === 200) {
+      if (response.data.status === 200) {
         alert("Category created successfully!");
         setCategoryName(""); // Reset form field
       }

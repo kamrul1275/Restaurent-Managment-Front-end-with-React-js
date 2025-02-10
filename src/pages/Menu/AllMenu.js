@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+// const useEffect [manu,setMenu]=  useState([]);
 
 const AllMenu = () => {
+  const [menu, setMenu] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [filteredMenus, setFilteredMenus] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const menuData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("http://localhost:8000/api/items");
+        if (response.data && response.data.menu) {
+          setMenu(response.data.menu);
+          setFilteredMenus(response.data.menu);
+          console.log("Menu data ckeck", response.data.menu);
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching categories:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    menuData();
+  });
+
   return (
     <div className="page-content">
       <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -38,29 +67,29 @@ const AllMenu = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Beef Lover</td>
-                <td>Pizza</td>
-                <td>350 tk</td>
-                <td>Pizza Mafia</td>
-                <td>
-                  <button className="btn btn-primary btn-sm">Edit</button>
-                  <button className="btn btn-danger btn-sm ms-2">Delete</button>
-                </td>
-              </tr>
-
-              <tr>
-                <th scope="row">2</th>
-                <td>Mini Burger </td>
-                <td>Burger</td>
-                <td>60</td>
-                <td>Lalmatiya</td>
-                <td>
-                  <button className="btn btn-primary btn-sm">Edit</button>
-                  <button className="btn btn-danger btn-sm ms-2">Delete</button>
-                </td>
-              </tr>
+              {menu.length > 0 ? (
+                menu.map((item, index) => (
+                  <tr key={item.menu_id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{item.name}</td>
+                    <td>{item.category_id}</td>
+                    <td>{item.price} tk</td>
+                    <td>{item.description ? item.description : "N/A"}</td>
+                    <td>
+                      <button className="btn btn-primary btn-sm">Edit</button>
+                      <button className="btn btn-danger btn-sm ms-2">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No menu items found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

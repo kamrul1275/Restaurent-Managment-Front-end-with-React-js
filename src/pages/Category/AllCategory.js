@@ -1,129 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const AllCategory = () => {
-//   const [categories, setCategories] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [searchTerm, setSearchTerm] = useState(""); // For search functionality
-//   const [currentPage, setCurrentPage] = useState(1); // For pagination
-//   const [itemsPerPage] = useState(10); // Items per page
-
-//   // Fetch categories from the API
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:8000/api/category");
-//         console.log(response.data.categories); // Log the API response
-//         setCategories(response.data.categories); // Store categories in state
-//       } catch (err) {
-//         setError("Failed to fetch categories.");
-//       } finally {
-//         setLoading(false); // Stop loading once data is fetched
-//       }
-//     };
-
-//     fetchCategories();
-//   }, []);
-
-//   // Handle search with optional chaining and fallback
-//   const filteredCategories = categories.filter((category) =>
-//     category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-
-//   // Pagination logic
-//   const indexOfLastItem = currentPage * itemsPerPage;
-//   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-//   const currentItems = filteredCategories.slice(
-//     indexOfFirstItem,
-//     indexOfLastItem
-//   );
-
-//   // Change page
-//   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-//   if (loading) {
-//     return <div className="text-center mt-5">Loading...</div>; // Show loading state while fetching
-//   }
-
-//   if (error) {
-//     return <div className="text-danger text-center mt-5">{error}</div>; // Show error message if fetching fails
-//   }
-
-//   return (
-//     <div className="container mt-5">
-//       <div className="card shadow">
-//         <div className="card-header bg-primary text-white">
-//           <h4 className="mb-0">Category List</h4>
-//         </div>
-//         <div className="card-body">
-//           {/* Search Input */}
-//           <div className="mb-3">
-//             <input
-//               type="text"
-//               className="form-control"
-//               placeholder="Search by name..."
-//               value={searchTerm}
-//               onChange={(e) => setSearchTerm(e.target.value)}
-//             />
-//           </div>
-
-//           {/* Table */}
-//           <div className="table-responsive">
-//             <table className="table table-striped table-hover">
-//               <thead className="table-dark">
-//                 <tr>
-//                   <th>Name</th>
-//                   <th>Position</th>
-//                   <th>Office</th>
-//                   <th>Age</th>
-//                   <th>Start Date</th>
-//                   <th>Salary</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {currentItems.map((category, index) => (
-//                   <tr key={index}>
-//                     <td>{category?.name || "N/A"}</td>
-//                     <td>{category?.position || "N/A"}</td>
-//                     <td>{category?.office || "N/A"}</td>
-//                     <td>{category?.age || "N/A"}</td>
-//                     <td>{category?.startDate || "N/A"}</td>
-//                     <td>{category?.salary || "N/A"}</td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-
-//           {/* Pagination */}
-//           <nav>
-//             <ul className="pagination justify-content-center">
-//               {Array.from({
-//                 length: Math.ceil(filteredCategories.length / itemsPerPage),
-//               }).map((_, index) => (
-//                 <li
-//                   key={index}
-//                   className={`page-item ${
-//                     currentPage === index + 1 ? "active" : ""
-//                   }`}
-//                 >
-//                   <button
-//                     className="page-link"
-//                     onClick={() => paginate(index + 1)}
-//                   >
-//                     {index + 1}
-//                   </button>
-//                 </li>
-//               ))}
-//             </ul>
-//           </nav>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
 // export default AllCategory;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -177,6 +51,7 @@ const AllCategory = () => {
         if (response.data && response.data.categories) {
           setCategories(response.data.categories);
           setFilteredCategories(response.data.categories);
+          
         }
       } catch (err) {
         setError(err.message);
@@ -188,6 +63,30 @@ const AllCategory = () => {
 
     fetchCategories();
   }, []);
+
+  const handleDelete = async (categoryId) => {
+    if (!window.confirm("Are you sure you want to delete this category?"))
+      return;
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/category/${categoryId}`
+      );
+
+      if (response.status !== 200) {
+        throw new Error(response.data.message || "Failed to delete category");
+      }
+
+      alert(response.data.message);
+
+      // Refresh category list after deletion
+      setCategories(
+        categories.filter((category) => category.category_id !== categoryId)
+      );
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  };
 
   // Search functionality
   useEffect(() => {
@@ -267,19 +166,6 @@ const AllCategory = () => {
         </div>
       </div>
 
-      {/* Header */}
-      {/* <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Category</h2>
-
-        <button
-          className="btn btn-primary"
-          onClick={() => navigate("/add-category")}
-          style={styles.actionButton}
-        >
-          <i className="bx bx-plus"></i> Add New Category
-        </button>
-      </div> */}
-
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h3>Category List</h3>
@@ -287,7 +173,7 @@ const AllCategory = () => {
         <div>
           <button
             className="btn btn-primary mb-3"
-            onClick={() => navigate("/add-category")}
+            onClick={() => navigate("/add/category")}
           >
             <i className="bx bx-plus"></i> Add Category
           </button>
@@ -388,12 +274,10 @@ const AllCategory = () => {
 
                     <button
                       className="btn btn-danger btn-sm"
-                      onClick={() =>
-                        navigate(`/delete-category/${category.category_id}`)
-                      }
+                      onClick={() => handleDelete(category.category_id)}
                       style={styles.actionButton}
                     >
-                      <i class="bx bxs-trash"></i>
+                      <i className="bx bxs-trash"></i>
                     </button>
                   </td>
                 </tr>
@@ -501,4 +385,3 @@ const AllCategory = () => {
 };
 
 export default AllCategory;
-
